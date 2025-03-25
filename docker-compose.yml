@@ -1,0 +1,121 @@
+# docker-compose.yml
+
+services:
+
+  # PostgreSQL database for app project
+  app-postgres:
+    image: postgres:14
+    ports:
+      - "5432:5432"  # Using different host port to avoid conflicts
+    environment:
+      - POSTGRES_USER=app_user
+      - POSTGRES_PASSWORD=app_password
+      - POSTGRES_DB=app_db
+    volumes:
+      - app-postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d app_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-net
+
+  # Database management service
+  app-database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    depends_on:
+      - app-postgres
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-net
+    volumes:
+      - ./database:/app
+      - /app/node_modules
+    command: sh -c "sleep 5 && npm run migration:run && npm run seed"
+
+  # Redis for session storage
+  app-redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - app-redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    networks:
+      - app-net
+
+  # Resource Server User API
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=8000
+  #     - DB_HOST=app-postgres
+  #     - DB_PORT=5432
+  #     - DB_USER=app_user
+  #     - DB_PASSWORD=app_password
+  #     - DB_NAME=app_db
+  #     - REDIS_URL=redis://redis:6379
+  #     - REDIS_HOST=redis // Change to `localhost` when in development
+  #     - REDIS_PASSWORD=
+  #     - REDIS_PORT=6379
+  #   # depends_on:
+  #   #   - 
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-net
+  #   volumes:
+  #     - ./backend:/app
+  #     - /app/node_modules
+      
+  # Resource Server Blog API
+  # serer:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8001:8001"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=8001
+  #     - DB_HOST=app-postgres
+  #     - DB_PORT=5432
+  #     - DB_USER=app_user
+  #     - DB_PASSWORD=app_password
+  #     - DB_NAME=app_db
+  #     - REDIS_URL=redis://redis:6379
+  #     - REDIS_HOST=redis // Change to `localhost` when in development
+  #     - REDIS_PASSWORD=
+  #     - REDIS_PORT=6379
+  #   # depends_on:
+  #   #   - 
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-net
+  #   volumes:
+  #     - ./server:/app
+  #     - /app/node_modules
+
+# Create network
+networks:
+  app-net:
+    driver: bridge
+
+# Create volume
+volumes:
+  app-redis-data:
+  app-postgres-data:
