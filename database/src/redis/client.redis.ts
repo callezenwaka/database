@@ -7,7 +7,6 @@ class RedisClient {
   private client: RedisClientType;
   
   private constructor() {
-    logger.info("======== REDIS_HOST ========: ", process.env.REDIS_HOST);
     this.client = createClient(this.getRedisConfig());
     
     this.client.on("error", (err) => {

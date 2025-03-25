@@ -1,5 +1,5 @@
 // backend/src/services/blog.service.ts
-import { Blog, getBlogRepository } from '@authenticate/database';
+import { Blog, getBlogRepository } from '@database/database';
 import { CreateBlogDto, UpdateBlogDto } from '../types';
 
 export class BlogService {

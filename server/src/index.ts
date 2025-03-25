@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Server } from 'http';
 import { logger } from "@/utils";
-import { getDataSource, closeDatabase, redisClient } from '@authenticate/database';
+import { getDataSource, closeDatabase, redisClient } from '@database/database';
 import app from './app';
 
 const PORT = process.env.PORT || 8001;

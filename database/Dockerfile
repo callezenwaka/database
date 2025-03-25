@@ -9,9 +9,11 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 # Copy package files
 COPY package.json package-lock.json ./
 
+# RUN npm install
+
 # Install dependencies
-RUN npm ci
-# RUN npm ci --ignore-scripts
+# RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Copy source code
 COPY . .

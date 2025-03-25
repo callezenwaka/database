@@ -1,6 +1,6 @@
 // backend/src/services/user.service.ts
-import { User } from '@authenticate/database';
-import { getUserRepository } from '@authenticate/database';
+import { User } from '@database/database';
+import { getUserRepository } from '@database/database';
 import * as crypto from 'crypto';
 import { CreateUserDto, UpdateUserDto } from '../types';
 

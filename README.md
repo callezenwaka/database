@@ -6,7 +6,7 @@ This package contains the shared database functionality for the Authenticate app
 
 ## Overview
 
-The `@authenticate/database` package provides a unified database interface for all services in the Authenticate application. It handles connections, migrations, and provides a consistent API for database operations.
+The `@database/database` package provides a unified database interface for all services in the Authenticate application. It handles connections, migrations, and provides a consistent API for database operations.
 
 ## Installation
 
@@ -17,7 +17,7 @@ To use this package in another service:
 ```json
 {
   "dependencies": {
-    "@authenticate/database": "file:../database"
+    "@database/database": "file:../database"
   }
 }
 ```
@@ -37,7 +37,7 @@ The build process compiles TypeScript source files to JavaScript in the `dist` d
 ## Usage
 
 ```typescript
-import { getDataSource, closeDatabase } from '@authenticate/database';
+import { getDataSource, closeDatabase } from '@database/database';
 
 // Example: Connect to the database
 async function connectToDatabase() {
