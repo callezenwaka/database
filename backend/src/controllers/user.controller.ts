@@ -1,7 +1,8 @@
 // backend/src/controllers/user.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services';
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from '../types';
+import { CreateUserDto, UpdateUserDto } from '../types';
+import { logger } from '@/utils';
 
 export class UserController {
   constructor(private userService = new UserService()) {}
@@ -26,6 +27,24 @@ export class UserController {
       
       res.json({ success: true, data: user });
     } catch (error) {
+      next(error);
+    }
+  };
+
+  create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userData: CreateUserDto = req.body;
+      logger.info("userData: ", userData);
+      const newUser = await this.userService.create(userData);
+      
+      // Remove password hash from response
+      const { passwordHash, ...userResponse } = newUser;
+      
+      res.status(201).json({ success: true, data: userResponse });
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('already exists')) {
+        return res.status(409).json({ success: false, message: error.message });
+      }
       next(error);
     }
   };
@@ -63,47 +82,4 @@ export class UserController {
       next(error);
     }
   };
-
-  // create = async (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     const userData: CreateUserDto = req.body;
-  //     const newUser = await this.userService.create(userData);
-      
-  //     // Remove password hash from response
-  //     const { passwordHash, ...userResponse } = newUser;
-      
-  //     res.status(201).json({ success: true, data: userResponse });
-  //   } catch (error) {
-  //     if (error instanceof Error && error.message.includes('already exists')) {
-  //       return res.status(409).json({ success: false, message: error.message });
-  //     }
-  //     next(error);
-  //   }
-  // };
-
-  // login = async (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     const loginData: LoginUserDto = req.body;
-  //     const user = await this.userService.authenticate(loginData);
-      
-  //     if (!user) {
-  //       return res.status(401).json({ 
-  //         success: false, 
-  //         message: 'Invalid username or password' 
-  //       });
-  //     }
-      
-  //     // For now, we'll just return the user
-  //     // Later, we'll integrate with Hydra for proper token issuance
-  //     const { passwordHash, ...userResponse } = user;
-      
-  //     res.json({ 
-  //       success: true, 
-  //       message: 'Login successful',
-  //       data: userResponse
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
 }

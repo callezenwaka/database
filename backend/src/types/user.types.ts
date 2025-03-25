@@ -1,12 +1,7 @@
-// node-service/src/types/user.types.ts
+// backend/src/types/user.types.ts
 export interface CreateUserDto {
   username: string;
   email: string;
-  password: string;
-}
-
-export interface LoginUserDto {
-  username: string;
   password: string;
 }
 

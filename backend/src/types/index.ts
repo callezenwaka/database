@@ -1,5 +1,5 @@
 import { Request } from 'express';
-export type { CreateUserDto, LoginUserDto, UpdateUserDto } from './user.types';
+export type { CreateUserDto, UpdateUserDto } from './user.types';
 
 export interface AuthenticatedRequest extends Request {
   auth?: {
