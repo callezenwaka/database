@@ -55,9 +55,9 @@ services:
       - app-net
 
   # Resource Server User API
-  app-backend:
+  app-alpha-server:
     build:
-      context: ./backend
+      context: ./alpha-server
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
@@ -80,14 +80,14 @@ services:
     networks:
       - app-net
     volumes:
-      - ./backend:/app
+      - ./alpha-server:/app
       - ./database:/app/node_modules/@database/database
       - /app/node_modules
       
   # Resource Server Blog API
   app-server:
     build:
-      context: ./server
+      context: ./beta-server
       dockerfile: Dockerfile
     ports:
       - "8001:8001"
@@ -110,7 +110,7 @@ services:
     networks:
       - app-net
     volumes:
-      - ./server:/app
+      - ./beta-server:/app
       - ./database:/app/node_modules/@database/database
       - /app/node_modules
 

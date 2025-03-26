@@ -1,4 +1,4 @@
-// alpha-server/src/utils/logger.ts
+// beta-server/src/utils/logger.ts
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 
 export const loggerConfig = {

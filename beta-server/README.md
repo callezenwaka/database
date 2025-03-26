@@ -1,6 +1,4 @@
-
-# database
-This repo demos connections to a single postgresql database from multiple servers.
+# Beta-server
 
 This package contains the shared database functionality for the Authenticate application.
 
@@ -56,24 +54,6 @@ async function connectToDatabase() {
 - `closeDatabase()`: Closes the database connection
 
 ## Development
-
-### Spin in hybrid
-```bash
-# Start docker components
-docker-compose down -v && docker-compose up -d
-
-# Comfirm database is running
-docker exec -it database-app-postgres-1 psql -U app_user -d app_db
-
-# Confirm hydra logs
-docker logs --tail 20 database-service-name
-
-# Start alpha-server
-npm run dev # npm run start:dev - for initialization
-
-# Start server
-npm run dev # npm run start:dev - for initialization
-```
 
 ### Running Migrations
 
